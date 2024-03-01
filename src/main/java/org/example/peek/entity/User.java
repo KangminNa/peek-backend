@@ -21,6 +21,9 @@ public class User {
     @Column(nullable = false) // null이 아니어야 함
     private String password;
 
-    @Column(nullable = false, length = 10) // null이 아니어야 하고 최대 길이가 10인 숫자
-    private String numbering;
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    private Numbering numbering;
+
+
 }
