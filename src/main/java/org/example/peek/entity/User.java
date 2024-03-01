@@ -21,8 +21,8 @@ public class User {
     @Column(nullable = false) // null이 아니어야 함
     private String password;
 
-    @OneToOne
-    @PrimaryKeyJoinColumn
+    @OneToOne(fetch = FetchType.LAZY) // User가 Numbering에 대해 OneToOne 관계를 가짐
+    @JoinColumn(name = "numbering_id") // User 테이블의 numbering_id 칼럼이 Numbering 테이블의 id 칼럼을 가리킴
     private Numbering numbering;
 
 
