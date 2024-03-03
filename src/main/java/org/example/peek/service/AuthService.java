@@ -53,11 +53,14 @@ public class AuthService {
         Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
 
         // JWT 토큰 생성
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setSubject(Long.toString(user.getId())) // 토큰 제목에 사용자 ID 저장
                 .setIssuedAt(now) // 토큰 발급 시간 설정
                 .setExpiration(expiryDate) // 토큰 만료 시간 설정
                 .signWith(SignatureAlgorithm.HS512, jwtSecret) // HS512 알고리즘 및 시크릿 키로 서명
                 .compact();
+
+        // 토큰을 JSON 형식으로 변환하여 반환
+        return "{\"token\": \"" + token + "\"}";
     }
 }

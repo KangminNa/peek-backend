@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -50,8 +52,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(LoginRequest loginRequest) {
-        return userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found")); // 예외 처리를 원하는 방식으로 수정하세요
+        // 이메일을 기반으로 사용자 조회
+        Optional<User> optionalUser = userRepository.findByEmail(loginRequest.getEmail());
+
+        // 사용자가 존재하는지 확인
+        User user = optionalUser.orElseThrow(() -> new RuntimeException("User not found"));
+
+        // 비밀번호 일치 여부 확인
+        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Incorrect password");
+        }
+
+        return user;
     }
 
 }
